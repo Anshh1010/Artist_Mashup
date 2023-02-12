@@ -105,18 +105,31 @@ def main(name,n,time,email):
     text = msg.as_string()
     s.sendmail(fromaddr, toaddr, text)
     s.quit()
-    os.remove("audio0.mp3")
-    os.remove(output)
 
-def download_audio(link):
-    yt = YouTube(link)
-  
-    video = yt.streams.filter(only_audio=True).first()  
-    out_file = video.download()
-    base, ext = os.path.splitext(out_file)
-    new_file = base + '.mp3'
-    os.rename(out_file, new_file)
-    
+def download_audio(yt_url):
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([yt_url])
+
+def get_video_time_in_ms(video_timestamp):
+    vt_split = video_timestamp.split(":")
+    if (len(vt_split) == 3): 
+        hours = int(vt_split[0]) * 60 * 60 * 1000
+        minutes = int(vt_split[1]) * 60 * 1000
+        seconds = int(vt_split[2]) * 1000
+    else: 
+        hours = 0
+        minutes = int(vt_split[0]) * 60 * 1000
+        seconds = int(vt_split[1]) * 1000
+
+    return hours + minutes + seconds
 
 
 from pydub import AudioSegment
@@ -124,32 +137,14 @@ def get_trimmed(mp3_filename, initial, final = ""):
     if (not mp3_filename):
         
         raise Exception("No MP3 found in local directory.")
-    vt_split = initial.split(":")
-    if (len(vt_split) == 3): 
-        h = int(vt_split[0]) * 60 * 60 * 1000
-        m = int(vt_split[1]) * 60 * 1000
-        s = int(vt_split[2]) * 1000
-    else: 
-        h = 0
-        m = int(vt_split[0]) * 60 * 1000
-        s = int(vt_split[1]) * 1000
+    
     sound = AudioSegment.from_mp3(mp3_filename)
-    t0 = h+m+s
+    t0 = get_video_time_in_ms(initial)
     print("Beginning trimming process for file ", mp3_filename, ".\n")
     print("Starting from ", initial, "...")
     if (len(final) > 0):
         print("...up to ", final, ".\n")
-    vt_split2 = final.split(":")
-    if (len(vt_split2) == 3): 
-        h2 = int(vt_split2[0]) * 60 * 60 * 1000
-        m2 = int(vt_split2[1]) * 60 * 1000
-        s2 = int(vt_split2[2]) * 1000
-    else: 
-        h2 = 0
-        m2 = int(vt_split2[0]) * 60 * 1000
-        s2 = int(vt_split2[1]) * 1000
-    sound = AudioSegment.from_mp3(mp3_filename)
-    t1 = h2+m2+s2
+        t1 = get_video_time_in_ms(final)
         return sound[t0:t1] 
     return sound[t0:] 
 
