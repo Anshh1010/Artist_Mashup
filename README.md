@@ -1,6 +1,7 @@
 # Artist_Mashup
 ##  Make a mashup of your favourite Artist's music
 This is a python project that takes asks the user about their favourite artist, the number of songs and the length of each song that they want in the mashup.   
+Implemented using flask and HTML.   
 
 ##   Libraries used:  
 1)Flask(Flask, flask_bootstrap render_template,request,redirect,url_for)   
@@ -30,6 +31,5 @@ The program works in the following steps:
 ### -> After trimming, they are merged and put into a ZIP file and mailed to the user.    
 <img width="485" alt="Screenshot 2023-02-13 at 12 09 58 AM" src="https://user-images.githubusercontent.com/72307339/218330285-2481cdf3-d035-4dba-9002-916e2fc76c33.png">
 <img width="914" alt="Screenshot 2023-02-13 at 12 11 18 AM" src="https://user-images.githubusercontent.com/72307339/218330335-1afe4a9c-7ccc-4ed6-bacc-b6f0ad8c1054.png">
-
-Implemented using flask and HTML.   
+   
 ### Made with ❤️
