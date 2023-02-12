@@ -21,7 +21,7 @@ I've used the youtubesearchpython package, which I got from pypi.org(https://pyp
 2) Installation of aforementioned libraries
 3) ffmpeg and ffprobe      
 ## Working    
-The program works in the following steps:  
+The program works in the following steps:   
 ### -> The user enters the artist's name, the number of songs, the trim time, i.e how long do they want each song to be in the mashup and their email ID.  
 <img width="659" alt="Screenshot 2023-02-13 at 12 04 46 AM" src="https://user-images.githubusercontent.com/72307339/218330045-66cda9a2-b725-4558-a084-e3e965fa8a1f.png">
 
