@@ -124,7 +124,7 @@ def get_trimmed(mp3_filename, initial, final = ""):
     if (not mp3_filename):
         
         raise Exception("No MP3 found in local directory.")
-    vt_split = video_timestamp.split(":")
+    vt_split = initial.split(":")
     if (len(vt_split) == 3): 
         h = int(vt_split[0]) * 60 * 60 * 1000
         m = int(vt_split[1]) * 60 * 1000
@@ -139,7 +139,17 @@ def get_trimmed(mp3_filename, initial, final = ""):
     print("Starting from ", initial, "...")
     if (len(final) > 0):
         print("...up to ", final, ".\n")
-        t1 = get_video_time_in_ms(final)
+    vt_split2 = final.split(":")
+    if (len(vt_split2) == 3): 
+        h2 = int(vt_split2[0]) * 60 * 60 * 1000
+        m2 = int(vt_split2[1]) * 60 * 1000
+        s2 = int(vt_split2[2]) * 1000
+    else: 
+        h2 = 0
+        m2 = int(vt_split2[0]) * 60 * 1000
+        s2 = int(vt_split2[1]) * 1000
+    sound = AudioSegment.from_mp3(mp3_filename)
+    t1 = h2+m2+s2
         return sound[t0:t1] 
     return sound[t0:] 
 
