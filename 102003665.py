@@ -2,8 +2,6 @@
 # Roll Number->102003665
 # Subgroup-> 3CO26
 # # Mashup Assignment (UCS654->Predictive Analytics)
-# email->anshh1010@gmail.com
-# pw->Hello@123
 from flask import Flask, render_template,request,redirect,url_for
 from flask_bootstrap import Bootstrap
 import pandas as pd
@@ -89,85 +87,36 @@ def main(name,n,time,email):
     fromaddr ="aaabb29072002@gmail.com"
     toaddr = email
     msg = MIMEMultipart()
-
-# instance of MIMEMultipart
-
-# storing the senders email address
     msg['From'] = fromaddr
-
-# storing the receivers email address
     msg['To'] = toaddr
-
-# storing the subject
     msg['Subject'] = "Mashup from 102003665"
-
-# string to store the body of the mail
     body = "Heylo, this is my submission for Assignment 2, Mashup"
-
-# attach the body with the msg instance
     msg.attach(MIMEText(body, 'plain'))
-
-# open the file to be sent
     filename = "102003665.zip"
     attachment = open("./102003665.zip", "rb")
-
-# instance of MIMEBase and named as p
     p = MIMEBase('application', 'octet-stream')
-
-# To change the payload into encoded form
     p.set_payload((attachment).read())
-
-# encode into base64
     encoders.encode_base64(p)
-
     p.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-
-# attach the instance 'p' to instance 'msg'
     msg.attach(p)
-
-# creates SMTP session
     s = smtplib.SMTP('smtp.gmail.com', 587)
-
-# start TLS for security
     s.starttls()
-
-# Authentication
     s.login(fromaddr, "utqbdsoeenjdgkum")
-
     text = msg.as_string()
-
-# sending the mail
     s.sendmail(fromaddr, toaddr, text)
-
-# terminating the session
     s.quit()
-    # os.remove("audio0.mp3")
-    # os.remove(output)
+    os.remove("audio0.mp3")
+    os.remove(output)
 
-def download_audio(yt_url):
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-    }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([yt_url])
-
-def get_video_time_in_ms(video_timestamp):
-    vt_split = video_timestamp.split(":")
-    if (len(vt_split) == 3): 
-        hours = int(vt_split[0]) * 60 * 60 * 1000
-        minutes = int(vt_split[1]) * 60 * 1000
-        seconds = int(vt_split[2]) * 1000
-    else: 
-        hours = 0
-        minutes = int(vt_split[0]) * 60 * 1000
-        seconds = int(vt_split[1]) * 1000
-
-    return hours + minutes + seconds
+def download_audio(link):
+    yt = YouTube(link)
+  
+    video = yt.streams.filter(only_audio=True).first()  
+    out_file = video.download()
+    base, ext = os.path.splitext(out_file)
+    new_file = base + '.mp3'
+    os.rename(out_file, new_file)
+    
 
 
 from pydub import AudioSegment
@@ -175,9 +124,17 @@ def get_trimmed(mp3_filename, initial, final = ""):
     if (not mp3_filename):
         
         raise Exception("No MP3 found in local directory.")
-    
+    vt_split = video_timestamp.split(":")
+    if (len(vt_split) == 3): 
+        h = int(vt_split[0]) * 60 * 60 * 1000
+        m = int(vt_split[1]) * 60 * 1000
+        s = int(vt_split[2]) * 1000
+    else: 
+        h = 0
+        m = int(vt_split[0]) * 60 * 1000
+        s = int(vt_split[1]) * 1000
     sound = AudioSegment.from_mp3(mp3_filename)
-    t0 = get_video_time_in_ms(initial)
+    t0 = h+m+s
     print("Beginning trimming process for file ", mp3_filename, ".\n")
     print("Starting from ", initial, "...")
     if (len(final) > 0):
