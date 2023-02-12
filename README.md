@@ -4,7 +4,7 @@ This is a python project that takes asks the user about their favourite artist, 
 Implemented using flask and HTML.   
 
 ##   Libraries used:  
-1)Flask(Flask, flask_bootstrap render_template,request,redirect,url_for)   
+1) Flask(Flask, flask_bootstrap render_template,request,redirect,url_for)   
 2) Pandas  
 3) Numpy    
 4) Sys    
